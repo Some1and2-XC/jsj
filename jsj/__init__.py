@@ -27,8 +27,11 @@ class JSON(dict):
     """
     JSON: a wrapper class for the default dictionary.
     Wrapping the default class allows for using dot notation to get values.
+    If dot notation can't find the attribute, `None` will be returned`.
     """
     def __getattr__(self, key):
+        if key not in self:
+            return None
         if type(self[key]) is dict:
             return JSON(self[key])
         else:
@@ -36,32 +39,49 @@ class JSON(dict):
     __setattr__ = dict.__setitem__
     __delattr__ = dict.__delitem__
 
-    def flatten(self, base: list = []) -> dict:
+    def flatten(self, base: list = [], sep: str = "_") -> list[Self]:
         """
         Function for flattening data, inspired by the pandas `pd.json_normalize()` function.
+        Takes a `base` array of indexes and self.
         """
 
-        def recurs_flat(item, index="") -> dict:
-            out = dict()
+        if type(base) != list: base = [base]
 
+        def recurs_flat(item, index="", keys=None) -> list[Self]:
+            """Internal function for recursively flattening a dictionary."""
+
+            # Initializes out dict
+            out: list[Self] = [JSON()]
+
+            # Dict logic
             if type(item) is dict or type(item) is JSON:
-                for k in item:
-                    out |= recurs_flat(item[k], index + k + "_")
+                for k, v in item.items():
+                    if len(out) == 0: out.append(dict())
 
-            elif type(item) is list:
-                for i, v in enumerate(item):
-                    out |= recurs_flat(v, index + str(i) + "_")
+                    for entry in recurs_flat(v, index + k + sep):
+                        out[-1] |= entry
 
+            # List logic
+            elif type(item) is list:  # For each value in the list
+                for i, v in enumerate(item):  # For each result in the recurs flat
+                    for res in recurs_flat(v, index):
+                        out.append(res)
+
+            # Value logic
             else:
-                out[index[:-1]] = item # Does fancy name indexing to remove '_'
+                out[-1][index[:-len(sep)]] = item # Does fancy name indexing to remove '_'
 
             return out
 
+        # Walks the dict to where the `base` points
         out_lst: dict | list = self
         for k in base:
             out_lst = out_lst[k]
 
-        assert type(out_lst) is list
+        # Does some basic checks
+        if type(out_lst) is list: out_lst = [out_lst]
+        if len(out_lst) == 0: return []
+
 
         return recurs_flat(out_lst)
 
@@ -115,6 +135,7 @@ def fetch(url: str, params: dict = {}) -> Response:
 
 
 if __name__ == "__main__":
+    # Weather API test
     url = "https://api.weather.gov/points/39.7632,-101.6483"
 
     time_zone = fetch(url) \
@@ -122,5 +143,16 @@ if __name__ == "__main__":
         .then(lambda v: v.properties.timeZone) \
         .get_data()
 
-    print(time_zone)
     assert time_zone == "America/Chicago"
+
+    # MusicBrainz API test
+    url = "https://musicbrainz.org/ws/2/release?artist=b1e26560-60e5-4236-bbdb-9aa5a8d5ee19&type=album|ep&fmt=json"
+    from Lindex import lindex
+    albums = fetch(url) \
+        .json() \
+        .then(lambda data: data.flatten(base=["releases"])) \
+        .then(lambda data: [item.title for item in data]) \
+        .get_data()
+
+    albums = list(set(albums))
+    print(albums)
