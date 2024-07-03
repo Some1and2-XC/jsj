@@ -16,9 +16,9 @@ time_zone = fetch(url) \
 assert time_zone == "America/Chicago"
 ```
 
-## Getting the albums release by an artist
+## Getting the albums released by an artist
 ```python
-# Sets the URL to Post Malone
+# Sets the URLs `artist` parameter to Post Malone
 url = "https://musicbrainz.org/ws/2/release?artist=b1e26560-60e5-4236-bbdb-9aa5a8d5ee19&type=album|ep&fmt=json"
 # Fetches, flattens and gets the titles to all releases
 albums = fetch(url) \
