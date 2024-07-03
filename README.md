@@ -15,6 +15,21 @@ time_zone = fetch(url) \
 
 assert time_zone == "America/Chicago"
 ```
+
+## Getting the albums release by an artist
+```python
+# Sets the URL to Post Malone
+url = "https://musicbrainz.org/ws/2/release?artist=b1e26560-60e5-4236-bbdb-9aa5a8d5ee19&type=album|ep&fmt=json"
+# Fetches, flattens and gets the titles to all releases
+albums = fetch(url) \
+    .json() \
+    .then(lambda data: data.flatten(base=["releases"])) \
+    .then(lambda data: [item.title for item in data]) \
+    .get_data()
+
+assert {"Stoney", "Hollywood’s Bleeding", "beerbongs & bentleys"}.issubset(albums)
+```
+
 ## Installation
 This package is available on pip
 ```

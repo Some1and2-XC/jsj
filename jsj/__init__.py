@@ -147,7 +147,6 @@ if __name__ == "__main__":
 
     # MusicBrainz API test
     url = "https://musicbrainz.org/ws/2/release?artist=b1e26560-60e5-4236-bbdb-9aa5a8d5ee19&type=album|ep&fmt=json"
-    from Lindex import lindex
     albums = fetch(url) \
         .json() \
         .then(lambda data: data.flatten(base=["releases"])) \
