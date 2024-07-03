@@ -11,7 +11,7 @@ Basic Usage:
 
     time_zone = fetch(url) \
         .json() \
-        .then(lambda v: v.properies.timeZone) \
+        .then(lambda v: v.properties.timeZone) \
         .get_data()
 
     assert time_zone == "America/Chicago"
