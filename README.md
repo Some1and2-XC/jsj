@@ -23,7 +23,7 @@ url = "https://musicbrainz.org/ws/2/release?artist=b1e26560-60e5-4236-bbdb-9aa5a
 # Fetches, flattens and gets the titles to all releases
 albums = fetch(url) \
     .json() \
-    .then(lambda data: data.flatten(base=["releases"])) \
+    .then(lambda data: data.flatten(base=["releases"])[0]) \
     .then(lambda data: [item.title for item in data]) \
     .get_data()
 
