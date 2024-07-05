@@ -19,6 +19,7 @@ Basic Usage:
 
 import json
 import requests
+from Lindex import lindex
 from os import environ
 
 from typing import Self, Callable, Any
@@ -27,7 +28,7 @@ from typing import Self, Callable, Any
 JSJ_NONE_ENV_KEY = "JSJ_NONE"
 
 
-class JSON(dict):
+class JSON(lindex):
     """
     JSON: a wrapper class for the default dictionary.
     Wrapping the default class allows for using dot notation to get values.
