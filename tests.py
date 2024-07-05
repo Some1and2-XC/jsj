@@ -41,6 +41,22 @@ class TestFlattenWithPandasCases(unittest.TestCase):
         jsj_data = jsj.JSON(data)
         res, keys = jsj_data.flatten()
 
+        # Sets expected values
+
+        first_value = {
+            "id": 1,
+            "name": "Cole Volk",
+            "fitness_height": 130,
+            "fitness_weight": 60,
+        }
+
+        defined_keys = {"id", "name", "fitness_height", "fitness_weight"}
+        defined_keys -= set(keys)
+
+        # Asserts
+        self.assertEqual(0, len(defined_keys), f"Keys should have length 0! Instead have value: '{defined_keys}'")
+        self.assertEqual(res[0], first_value, "Incorrect First Value!")
+
         self.assertEqual(len(res), 3, "Incorrect amount of values!")
         self.assertEqual(len(keys), 4, "Incorrect amount of keys!")
 

@@ -8,12 +8,40 @@ from jsj import *
 
 url = "https://api.weather.gov/points/39.7632,-101.6483"
 
-time_zone = fetch(url) \
+data = fetch(url) \
     .json() \
-    .then(lambda v: v.properties.timeZone) \
     .get_data()
 
-assert time_zone == "America/Chicago"
+assert data.properties.timeZone == "America/Chicago"
+```
+
+## Requesting and flattening JSON
+JSJ can flatten JSON documents, just like the `pandas.normalize_json()` function.
+```python
+from jsj import *
+# Some sample data
+data = JSON([
+    {
+        "id": 1,
+        "name": "Cole Volk",
+        "fitness": {"height": 130, "weight": 60},
+    },
+    {"name": "Mark Reg", "fitness": {"height": 130, "weight": 60}},
+    {
+        "id": 2,
+        "name": "Faye Raker",
+        "fitness": {"height": 130, "weight": 60},
+    },
+])
+
+data_flattened, keys = data.flatten()
+
+assert data_flattened[0] == {
+    "id": 1,
+    "name": "Cole Volk",
+    "fitness_height": 130,
+    "fitness_weight": 60,
+}
 ```
 
 ## Getting the albums released by an artist
