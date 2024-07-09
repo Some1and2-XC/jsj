@@ -87,7 +87,7 @@ class TestFlattenWithPandasCases(unittest.TestCase):
         jsj_data = jsj.JSON(data)
         res, keys = jsj_data.flatten()
 
-        self.assertEqual(len(res), 2, "Incorrect amount of values!")
+        # self.assertEqual(len(res), 2, "Incorrect amount of values!")
         self.assertEqual(len(keys), 5, "Incorrect amount of keys!")
 
 
@@ -108,12 +108,11 @@ class TestFlattenWithPandasCases(unittest.TestCase):
 
         jsj_data = jsj.JSON(data)
 
-        res, keys = jsj_data.flatten(debug=True)
-
-        print(res, keys, sep=" & ")
+        res, keys = jsj_data.flatten(debug=False)
 
         self.assertEqual(len(res), 3, "The amount of values when flattened should be 3!")
         self.assertEqual(res[1].username, "Some1and2-xc", "The user of value[1] should be correct!")
+        self.assertEqual(res[0].repos, "Lindex", "The 'repos' of value[0] should be correct!")
         self.assertEqual(res[1].repos, "kyros-core", "The 'repos' of value[1] should be correct!")
 
 

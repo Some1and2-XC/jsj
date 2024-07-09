@@ -99,21 +99,36 @@ class JSON(lindex):
 
             # Dict logic
             if type(item) is dict or type(item) is JSON:
+                # Goes through each k/v pair
                 for k, v in item.items():
-                    if len(out) == 0: out.append(dict())
+                    # ensures there is at least one dict in output
+                    if len(out) == 0: out.append(JSON())
 
-                    for entry in recurs_flat(v, index + str(k) + sep):
-                        out[-1] |= entry
+                    # go through each return value from recurs_flat
+                    for i, entry in enumerate(recurs_flat(v, index + str(k) + sep)):
+
+                        # if v is a list, duplicate the first entry
+                        if type(v) is list:
+                            out.append(out[0])
+
+                            for e_k in entry.keys():
+                                if e_k in out[-1]:
+                                    del out[-1][e_k]
+
+                            out[-1] = JSON(entry | out[-1])
+
+                        else:
+                            for out_entry, _ in enumerate(out):
+                                out[out_entry] |= entry
+
+                    if type(v) is list:
+                        out = out[1::]
 
             # List logic
             elif type(item) is list:  # For each value in the list
-                if debug: print("Printing List:", item)
-                if debug: print("Out:", out)
                 for i, v in enumerate(item):  # For each result in the recurs flat
-                    if debug: print(i, v, index, sep=" & ")
                     for res in recurs_flat(v, index):
                         if res: out.append(res)
-                if debug: print("Out Values:", out)
 
             # Value logic
             else:
@@ -123,7 +138,7 @@ class JSON(lindex):
 
                 if len(out) == 0:
                     if item:
-                        out = [{new_key: item}]
+                        out = [JSON({new_key: item})]
                     else:
                         out = []
                 else:
