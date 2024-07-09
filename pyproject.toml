@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "jsj"
 dynamic = ["dependencies"]
-version = "0.2.2"
+version = "0.3.0"
 authors = [
     {name="Mark Tobin"},
 ]
