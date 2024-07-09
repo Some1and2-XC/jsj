@@ -4,7 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "jsj"
-version = "0.2.0"
+dynamic = ["dependencies"]
+version = "0.2.2"
 authors = [
     {name="Mark Tobin"},
 ]
@@ -15,6 +16,9 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
 
 [project.urls]
 Homepage = "https://github.com/some1and2-XC/jsj"

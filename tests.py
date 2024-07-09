@@ -42,7 +42,6 @@ class TestFlattenWithPandasCases(unittest.TestCase):
         res, keys = jsj_data.flatten()
 
         # Sets expected values
-
         first_value = {
             "id": 1,
             "name": "Cole Volk",
