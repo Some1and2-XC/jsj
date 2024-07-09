@@ -74,7 +74,7 @@ class JSON(lindex):
             return self[key]
     __delattr__ = dict.__delitem__
 
-    def flatten(self, base: list = None, sep: str = "_") -> (list[Self], list[Any]):
+    def flatten(self, base: list = None, sep: str = "_", debug: bool = False) -> (list[Self], list[Any]):
         """
         Function for flattening data, inspired by the pandas `pd.json_normalize()` function.
         Takes a `base` array of indexes and self.
@@ -95,7 +95,7 @@ class JSON(lindex):
             """Internal function for recursively flattening a dictionary."""
 
             # Initializes out dict
-            out: list[Self] = [JSON()]
+            out: list[Self] = []
 
             # Dict logic
             if type(item) is dict or type(item) is JSON:
@@ -107,9 +107,13 @@ class JSON(lindex):
 
             # List logic
             elif type(item) is list:  # For each value in the list
+                if debug: print("Printing List:", item)
+                if debug: print("Out:", out)
                 for i, v in enumerate(item):  # For each result in the recurs flat
+                    if debug: print(i, v, index, sep=" & ")
                     for res in recurs_flat(v, index):
-                        out.append(res)
+                        if res: out.append(res)
+                if debug: print("Out Values:", out)
 
             # Value logic
             else:
@@ -117,7 +121,13 @@ class JSON(lindex):
                 if new_key not in known_keys:
                     known_keys.append(new_key)
 
-                out[-1][new_key] = item # Does fancy name indexing to remove '_'
+                if len(out) == 0:
+                    if item:
+                        out = [{new_key: item}]
+                    else:
+                        out = []
+                else:
+                    out[-1][new_key] = item # Does fancy name indexing to remove '_'
 
             return out
 

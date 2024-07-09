@@ -108,7 +108,7 @@ class TestFlattenWithPandasCases(unittest.TestCase):
 
         jsj_data = jsj.JSON(data)
 
-        res, keys = jsj_data.flatten()
+        res, keys = jsj_data.flatten(debug=True)
 
         print(res, keys, sep=" & ")
 
