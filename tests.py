@@ -91,6 +91,32 @@ class TestFlattenWithPandasCases(unittest.TestCase):
         self.assertEqual(len(keys), 5, "Incorrect amount of keys!")
 
 
+    def test_list_of_lists(self):
+        """Test for ensure good results of list of lists"""
+
+        data = [
+            {
+                "username": "Some1and2-xc",
+                "power_level": 9001,
+                "repos": [
+                    "Lindex",
+                    "kyros-core",
+                    "portfolio-website",
+                ],
+            },
+        ]
+
+        jsj_data = jsj.JSON(data)
+
+        res, keys = jsj_data.flatten()
+
+        print(res, keys, sep=" & ")
+
+        self.assertEqual(len(res), 3, "The amount of values when flattened should be 3!")
+        self.assertEqual(res[1].username, "Some1and2-xc", "The user of value[1] should be correct!")
+        self.assertEqual(res[1].repos, "kyros-core", "The 'repos' of value[1] should be correct!")
+
+
 class TestDotNotation(unittest.TestCase):
     """
     Test Module for testing dot notation indexing and network requests.
