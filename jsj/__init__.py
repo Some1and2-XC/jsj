@@ -22,7 +22,7 @@ import requests
 from Lindex import lindex
 from os import environ
 
-from typing import Self, Callable, Any
+from typing_extensions import Self, Callable, Any
 
 # Environment Variable for defining dehavior of values using dot notatition not being found
 JSJ_NONE_ENV_KEY = "JSJ_NONE"
