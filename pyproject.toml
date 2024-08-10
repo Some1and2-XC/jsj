@@ -4,13 +4,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "jsj"
-version = "0.3.1"
+version = "0.3.2"
 authors = [
     {name="Mark Tobin"},
 ]
 dependencies = [
     "requests",
     "Lindex",
+    "typing_extensions",
 ]
 description="JavaScript QoL for JSON in python"
 readme="README.md"
